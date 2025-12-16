@@ -1,6 +1,5 @@
 const BASE_URL = "https://chatbot-to-get-data-from-db.onrender.com";
 
-
 export async function sendChatMessage(message) {
   const res = await fetch(`${BASE_URL}/chat`, {
     method: "POST",
@@ -12,9 +11,10 @@ export async function sendChatMessage(message) {
 
   return res.json();
 }
+
 export async function getAddressByClientId(clientId) {
   const res = await fetch(
-    `http://127.0.0.1:8000/clients/${clientId}/addresses`
+    `${BASE_URL}/clients/${clientId}/addresses`
   );
   return res.json();
 }
