@@ -22,3 +22,14 @@ cd backend
 pythonenv\Scripts\activate
 pip install -r requirements.txt
 uvicorn main:app --reload
+
+## Chatbot Usage (Sample Queries)
+
+Use the following text inputs in the chatbot for demo and validation:
+get me list of clients
+
+get client name John
+
+get address name Emily
+
+get address id <client_uuid>
