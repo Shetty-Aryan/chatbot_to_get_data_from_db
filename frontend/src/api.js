@@ -1,4 +1,4 @@
-const BASE_URL = "https://your-backend-name.onrender.com";
+const BASE_URL = "https://chatbot-to-get-data-from-db.onrender.com";
 
 
 export async function sendChatMessage(message) {
