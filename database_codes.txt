@@ -1,0 +1,96 @@
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+CREATE TABLE state (
+    stt_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(50),
+    pincode VARCHAR(10)
+);
+
+CREATE TABLE client (
+    pty_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    phone VARCHAR(20),
+    ssn VARCHAR(20)
+);
+
+CREATE TABLE address (
+    add_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    line1 VARCHAR(100),
+    line2 VARCHAR(100),
+    city VARCHAR(50),
+    zip VARCHAR(10),
+    state_id UUID REFERENCES state(stt_id),
+    party_id UUID REFERENCES client(pty_id)
+);
+
+INSERT INTO state (name, pincode) VALUES
+('California', 'CA'),
+('Texas', 'TX'),
+('New York', 'NY'),
+('Florida', 'FL'),
+('Illinois', 'IL');
+
+INSERT INTO client (first_name, last_name, phone, ssn) VALUES
+('John', 'Doe', '9000000001', '111-11-1111'),
+('Jane', 'Smith', '9000000002', '222-22-2222'),
+('Michael', 'Brown', '9000000003', '333-33-3333'),
+('Emily', 'Davis', '9000000004', '444-44-4444'),
+('Daniel', 'Wilson', '9000000005', '555-55-5555'),
+('Sophia', 'Taylor', '9000000006', '666-66-6666'),
+('Chris', 'Anderson', '9000000007', '777-77-7777'),
+('Olivia', 'Thomas', '9000000008', '888-88-8888'),
+('Matthew', 'Moore', '9000000009', '999-99-9999'),
+('Ava', 'Jackson', '9000000010', '101-01-0101'),
+('Ryan', 'White', '9000000011', '202-02-0202'),
+('Emma', 'Harris', '9000000012', '303-03-0303');
+
+INSERT INTO address (line1, line2, city, zip, state_id, party_id)
+VALUES
+('101 Main St', 'Apt 1', 'Los Angeles', '90001',
+ (SELECT stt_id FROM state WHERE pincode='CA'),
+ (SELECT pty_id FROM client WHERE first_name='John')),
+
+('202 Oak Ave', NULL, 'Houston', '77001',
+ (SELECT stt_id FROM state WHERE pincode='TX'),
+ (SELECT pty_id FROM client WHERE first_name='Jane')),
+
+('303 Pine Rd', NULL, 'New York', '10001',
+ (SELECT stt_id FROM state WHERE pincode='NY'),
+ (SELECT pty_id FROM client WHERE first_name='Michael')),
+
+('404 Maple St', NULL, 'Chicago', '60601',
+ (SELECT stt_id FROM state WHERE pincode='IL'),
+ (SELECT pty_id FROM client WHERE first_name='Emily')),
+
+('505 Cedar Blvd', NULL, 'Miami', '33101',
+ (SELECT stt_id FROM state WHERE pincode='FL'),
+ (SELECT pty_id FROM client WHERE first_name='Daniel')),
+
+('606 Birch Ln', NULL, 'Dallas', '75201',
+ (SELECT stt_id FROM state WHERE pincode='TX'),
+ (SELECT pty_id FROM client WHERE first_name='Sophia')),
+
+('707 Walnut St', NULL, 'San Jose', '95101',
+ (SELECT stt_id FROM state WHERE pincode='CA'),
+ (SELECT pty_id FROM client WHERE first_name='Chris')),
+
+('808 Cherry Ave', NULL, 'Orlando', '32801',
+ (SELECT stt_id FROM state WHERE pincode='FL'),
+ (SELECT pty_id FROM client WHERE first_name='Olivia')),
+
+('909 Aspen Way', NULL, 'Buffalo', '14201',
+ (SELECT stt_id FROM state WHERE pincode='NY'),
+ (SELECT pty_id FROM client WHERE first_name='Matthew')),
+
+('111 Willow Dr', NULL, 'Naperville', '60540',
+ (SELECT stt_id FROM state WHERE pincode='IL'),
+ (SELECT pty_id FROM client WHERE first_name='Ava')),
+
+('222 Poplar St', NULL, 'Austin', '73301',
+ (SELECT stt_id FROM state WHERE pincode='TX'),
+ (SELECT pty_id FROM client WHERE first_name='Ryan')),
+
+('333 Spruce Ct', NULL, 'San Diego', '92101',
+ (SELECT stt_id FROM state WHERE pincode='CA'),
+ (SELECT pty_id FROM client WHERE first_name='Emma'));
