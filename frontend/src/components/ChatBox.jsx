@@ -11,6 +11,12 @@ export default function ChatBox({ onResponse }) {
     setMessage("");
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      sendMessage();
+    }
+  };
+
   return (
     <>
       <input
@@ -23,8 +29,10 @@ export default function ChatBox({ onResponse }) {
         }}
         value={message}
         onChange={(e) => setMessage(e.target.value)}
+        onKeyDown={handleKeyDown}   // 👈 THIS LINE
         placeholder="Type a query..."
       />
+
       <button
         style={{
           width: "100%",
@@ -33,6 +41,7 @@ export default function ChatBox({ onResponse }) {
           color: "white",
           border: "none",
           borderRadius: "4px",
+          cursor: "pointer",
         }}
         onClick={sendMessage}
       >
