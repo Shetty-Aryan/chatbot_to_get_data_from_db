@@ -8,6 +8,12 @@ function App() {
   const [chatResponse, setChatResponse] = useState(null);
   const [details, setDetails] = useState(null);
 
+  // 🔥 Clear client details whenever a new chat response arrives
+  const handleChatResponse = (response) => {
+    setChatResponse(response);
+    setDetails(null); // CLEAR client details table
+  };
+
   const handleRowClick = async (row) => {
     if (row.pty_id) {
       const addressData = await getAddressByClientId(row.pty_id);
@@ -20,7 +26,7 @@ function App() {
       {/* Left: Chat */}
       <div className="chat-panel">
         <h3>Chatbot</h3>
-        <ChatBox onResponse={setChatResponse} />
+        <ChatBox onResponse={handleChatResponse} />
       </div>
 
       {/* Right: Results */}
@@ -44,6 +50,7 @@ function App() {
 
         <div className="card">
           <h3>Client Details</h3>
+
           {details ? (
             <DataGrid data={details} />
           ) : (
