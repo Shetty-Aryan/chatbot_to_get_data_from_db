@@ -39,7 +39,7 @@ def get_addresses(client_id: str, db: Session = Depends(get_db)):
 def get_addresses_by_name(name: str, db: Session = Depends(get_db)):
     return crud.get_addresses_by_client_name(db, name)
 
-@app.post("/chat", response_model=schemas.ChatResponse)
+@app.post("/chat")
 def chat(req: schemas.ChatRequest, db: Session = Depends(get_db)):
 
     intent = crud.detect_intent(req.message)
