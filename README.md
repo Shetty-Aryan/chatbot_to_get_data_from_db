@@ -92,7 +92,7 @@ chatbot_to_get_data_from_db/
 Users can type queries such as:
 - “Show all clients”
 - “Get client named John”
-- “Show addresses for client John”
+- “Show addresses for client named John”
 
 The chatbot processes the message and fetches data from the database using backend APIs, then displays results in a table.
 
