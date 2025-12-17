@@ -43,26 +43,38 @@ def get_addresses_by_name(name: str, db: Session = Depends(get_db)):
 def chat(req: schemas.ChatRequest, db: Session = Depends(get_db)):
 
     intent = crud.detect_intent(req.message)
+    name = crud.extract_name(req.message)
+    
+    intent = crud.detect_intent(req.message)
+    
 
+    name = crud.extract_name(req.message)
+    
     if intent == "GET_CLIENTS":
         clients = crud.get_clients(db)
         data = [schemas.ClientOut.from_orm(c) for c in clients]
         return {"type": "clients", "data": data}
 
     elif intent == "GET_CLIENT_BY_NAME":
-        name = req.message.split()[-1]
+        if not name:
+            return {"type": "text", "data": "Please provide a client name."}
+
         clients = crud.get_client_by_name(db, name)
         data = [schemas.ClientOut.from_orm(c) for c in clients]
         return {"type": "clients", "data": data}
 
     elif intent == "GET_ADDRESS_BY_NAME":
-        name = req.message.split()[-1]
+        if not name:
+            return {"type": "text", "data": "Please provide a client name."}
+
         addresses = crud.get_addresses_by_client_name(db, name)
         data = [schemas.AddressOut.from_orm(a) for a in addresses]
         return {"type": "clients", "data": data}
 
     elif intent == "GET_ADDRESS_BY_ID":
-        client_id = req.message.split()[-1]
+        parts = req.message.split()
+        client_id = parts[-1]
+
         addresses = crud.get_addresses_by_client_id(db, client_id)
         data = [schemas.AddressOut.from_orm(a) for a in addresses]
         return {"type": "clients", "data": data}

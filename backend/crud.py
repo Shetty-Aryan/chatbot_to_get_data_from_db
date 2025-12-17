@@ -1,14 +1,30 @@
 from sqlalchemy.orm import Session
 from models import Client, Address
 
+
+# ---------------------------
+# DATABASE QUERIES
+# ---------------------------
+
 def get_clients(db: Session):
     return db.query(Client).all()
 
+
 def get_client_by_name(db: Session, name: str):
-    return db.query(Client).filter(Client.first_name.ilike(f"%{name}%")).all()
+    return (
+        db.query(Client)
+        .filter(Client.first_name.ilike(f"%{name}%"))
+        .all()
+    )
+
 
 def get_addresses_by_client_id(db: Session, client_id):
-    return db.query(Address).filter(Address.party_id==client_id).all()
+    return (
+        db.query(Address)
+        .filter(Address.party_id == client_id)
+        .all()
+    )
+
 
 def get_addresses_by_client_name(db: Session, name: str):
     return (
@@ -18,23 +34,50 @@ def get_addresses_by_client_name(db: Session, name: str):
         .all()
     )
 
+
+# ---------------------------
+# NLP / INTENT HELPERS
+# ---------------------------
+
+def extract_name(message: str):
+    """
+    Extracts client name from natural language queries.
+    Supports:
+    - get client john
+    - get address of john
+    - get address of client john
+    """
+    words = message.lower().strip().split()
+
+    # Case: "client john"
+    if "client" in words:
+        idx = words.index("client")
+        if idx + 1 < len(words):
+            return words[idx + 1]
+
+    # Case: "address of john"
+    if "of" in words:
+        idx = words.index("of")
+        if idx + 1 < len(words):
+            return words[idx + 1]
+
+    return None
+
+
 def detect_intent(message: str):
     msg = message.lower()
+    
 
-    # 1. List all clients
-    if ("list" in msg or "all" in msg) and "client" in msg:
-        return "GET_CLIENTS"
-
-    # 2. Get address by client name
-    if "address" in msg and "name" in msg:
+    # ADDRESS intent (check first)
+    if "address" in msg or "addresses" in msg:
+        if "id" in msg:
+            return "GET_ADDRESS_BY_ID"
         return "GET_ADDRESS_BY_NAME"
 
-    # 3. Get address by client id
-    if "address" in msg and "id" in msg:
-        return "GET_ADDRESS_BY_ID"
-
-    # 4. Get client by name
-    if "client" in msg and "name" in msg:
+    # CLIENT intent
+    if "client" in msg or "clients" in msg:
+        if "list" in msg or "all" in msg or "show" in msg:
+            return "GET_CLIENTS"
         return "GET_CLIENT_BY_NAME"
 
     return "UNKNOWN"
