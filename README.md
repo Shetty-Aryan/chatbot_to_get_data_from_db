@@ -47,30 +47,45 @@ Database:
 ## Project Structure
 
 chatbot_to_get_data_from_db/
+
 │
+
 ├── backend/
+
 │ ├── main.py
+
 │ ├── models.py
+
 │ ├── schemas.py
+
 │ ├── crud.py
+
 │ ├── database.py
+
 │ └── requirements.txt
+
 │
+
 ├── frontend/
+
 │ ├── src/
+
 │ │ ├── components/
+
 │ │ │ ├── ChatBox.jsx
+
 │ │ │ └── DataGrid.jsx
+
 │ │ ├── api.js
+
 │ │ └── App.js
+
 │ └── package.json
+
 │
 └── README.md
 
-yaml
-Copy code
 
----
 
 ## How the Chatbot Works
 
