@@ -27,8 +27,16 @@ function App() {
       <div className="content-panel">
         <div className="card">
           <h3>Clients</h3>
+
           {chatResponse ? (
-            <DataGrid data={chatResponse.data} onRowClick={handleRowClick} />
+            chatResponse.type === "text" ? (
+              <p className="bot-text">🤖 {chatResponse.data}</p>
+            ) : (
+              <DataGrid
+                data={chatResponse.data}
+                onRowClick={handleRowClick}
+              />
+            )
           ) : (
             <p className="empty">Ask the chatbot to load clients.</p>
           )}
